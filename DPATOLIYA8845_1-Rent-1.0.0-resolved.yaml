@@ -1,0 +1,129 @@
+---
+openapi: 3.0.0
+info:
+  title: Assignment3
+  description: Rent API
+  contact:
+    email: Dpatoliya8845@conestogac.on.ca
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+servers:
+  - url: https://virtserver.swaggerhub.com/DPATOLIYA8845_1/Rent/1.0.0
+    description: SwaggerHub API Auto Mocking
+tags:
+  - name: admins
+    description: Secured Admin-only calls
+  - name: Darshan Patoliya
+    description: Operations available to regular developers
+paths:
+  /Rent{id}:
+    get:
+      tags:
+        - Darshan Patoliya
+      summary: searches Rent
+      description: |
+        By passing in the appropriate options, you can search for
+        available Rent in the system
+      operationId: searchInventory
+      parameters:
+        - name: searchString
+          in: query
+          description: pass an optional search string for looking up inventory
+          required: false
+          style: form
+          explode: true
+          schema:
+            type: string
+        - name: skip
+          in: query
+          description: number of records to skip for pagination
+          required: false
+          style: form
+          explode: true
+          schema:
+            minimum: 0
+            type: integer
+            format: int32
+        - name: limit
+          in: query
+          description: maximum number of records to return
+          required: false
+          style: form
+          explode: true
+          schema:
+            maximum: 50
+            minimum: 0
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/Default'
+        '400':
+          description: bad input parameter
+    post:
+      tags:
+        - admins
+      summary: add a tenant
+      description: Adds a tenant to the system
+      operationId: add-tenant
+      requestBody:
+        description: tenant to add
+        content:
+          application/json:
+            schema:
+              $ref: '#/Default/tenants'
+      responses:
+        '201':
+          description: item created
+        '400':
+          description: invalid input, object invalid
+        '409':
+          description: an existing item already exists
+components:
+  schemas:
+    RentItem:
+      required:
+        - TenantID
+        - name
+        - Rent
+        - Email
+      type: object
+      properties:
+        TenantID:
+          type: integer
+          format: integer
+          example: 1
+        name:
+          type: string
+          example: Widget Adapter
+        Rent:
+          type: integer
+          format: integer
+          example: 500
+        Email:
+          type: email
+          format: Email Address
+          example: Dpatoliya8845@conestogac.on.ca
+    Manufacturer:
+      required:
+        - name
+      type: object
+      properties:
+        name:
+          type: string
+          example: ACME Corporation
+        homePage:
+          type: string
+          format: url
+          example: https://www.acme-corp.com
+        phone:
+          type: string
+          example: 408-867-5309
